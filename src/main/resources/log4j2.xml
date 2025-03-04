@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="INFO" monitorInterval="30">
+    <appenders>
+        <!--文件存储文件设置-->
+        <!--fileName：文件存储路径及名称，可以是绝对路径或者相对路径; 存储的永远是最新的日志信息-->
+        <!--filePattern：当 fileName 指定的文件大小超过限制，就会根据此文件名规则新建存档目录与文件，同时将 fileName 文件中的
+         内容剪切到存档文件中，如下配置，会新建存档路径 logs/2021-06/2021-06-01-1.log -->
+<!--        <RollingFile name="FILE-LOG" fileName="logs/com-ddd-example.log"-->
+<!--                     filePattern="logs/$${date:yyyy-MM}/com-ddd-example-%d{yyyy-MM-dd}-%i.log">-->
+<!--            &lt;!&ndash;日志文件中日志信息的格式&ndash;&gt;-->
+<!--            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} =>[%thread] == %-5level %logger{50}:%line - %X{traceId} - %msg%n"/>-->
+<!--            <Policies>-->
+<!--                <TimeBasedTriggeringPolicy/>-->
+<!--                &lt;!&ndash;日志文件大小超过多少时进行存档&ndash;&gt;-->
+<!--                <SizeBasedTriggeringPolicy size="500 MB"/>-->
+<!--            </Policies>-->
+<!--        </RollingFile>-->
+        <!--控制台打印-->
+        <console name="CONSOLE-LOG" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][traceId=%mdc{trace_id}][spanId=%mdc{span_id}][%thread] => %logger{60}:%line - %X{traceId} - %msg%n"/>
+        </console>
+    </appenders>
+
+    <loggers>
+        <logger name="com.qidi.datalearning" level="INFO"/>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE-LOG"/>
+        </root>
+    </loggers>
+</configuration>

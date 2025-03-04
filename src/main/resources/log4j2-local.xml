@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--日志级别从低到高优先级为：ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF。-->
+<configuration status="DEBUG" monitorInterval="30">
+    <appenders>
+        <console name="CONSOLE-LOG" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}][%-5level][traceId=%mdc{trace_id}][spanId=%mdc{span_id}][%thread] => %logger{60}:%line - %X{traceId} - %msg%n"/>
+        </console>
+    </appenders>
+
+    <loggers>
+        <!-- MyBatis SQL logger configuration 打印sql日志 -->
+        <logger name="com.apache.ibatis" level="TRACE" />
+        <logger name="java.sql.Connection" level="DEBUG" />
+        <logger name="java.sql.Statement" level="DEBUG" />
+        <logger name="java.sql.PreparedStatement" level="DEBUG" />
+        <!--   本地打印控制台，测试和线上打印在file中    -->
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE-LOG"/>
+        </root>
+    </loggers>
+</configuration>

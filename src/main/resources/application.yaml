@@ -1,0 +1,83 @@
+server:
+  port: 8410
+
+# spring自己的异步任务线程池的大小
+#task:
+#  corePoolSize: 10
+#  maxPoolSize: 50
+#  queueCapacity: 200
+#  threadNamePrefix: "WarehouseExecutor-"
+
+# spring的配置，多环境的配置使用k8s的配置文件进行替换，不再使用本地配置文件的配置， 这里这个配置是ok的，但是为了服务能启动，数据库的使用先注释掉
+spring:
+#  datasource:
+#    url: jdbc:mysql://127.0.0.1:3306/ddd_example?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+#    username: root
+#    password: QpJFDmB3LAww1RCy
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    # 计算密集型，非io密集型，先配置5
+#    druid:
+#      initial-size: 5
+#      minIdle: 5
+#      maxActive: 20
+#      # 最大等待时间，内网：800，外网：1200, 配置4000（三次握手1s）
+#      maxWait: 6000
+#      timeBetweenEvictionRunsMillis: 60000
+#      minEvictableIdleTimeMillis: 30000
+#      validationQuery: SELECT 1
+#      testWhileIdle: true
+#      testOnBorrow: false
+#      testOnReturn: false
+#      poolPreparedStatements: false
+#      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8
+    # redis的启动也是ok的，服务能启动，先注释掉
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    database: 10
+#    password: v8oB9GrMiXjYp5fi
+#    timeout: 5000 # 连接超时时间5000ms
+#    lettuce:
+#      pool:
+#        max-active: 8 # 连接池中最大连接数
+#        max-wait: -1 # 获取连接的最大等待时间（毫秒），-1 表示无限等待
+#        max-idle: 8 # 连接池中最大空闲连接数
+#        min-idle: 5 # 连接池中最小空闲连接数
+
+#swagger线上配置成false，线下true用于生成文档
+swagger:
+  enable: true
+
+# elastic的索引名和登录，能启动，先注释
+#elasticsearch:
+#  host: 127.0.0.1,127.0.0.1 # k8s上动态配置es，需要按照string类型处理，可以动态解析 host1,host2,
+#  port: 9200
+#  username: name
+#  password: pwd
+#  max-connect-num: 100
+#  max-connect-num-per-route: 50
+
+# 异步线程池的配置很重要
+customer:
+  corePoolSize: 8
+  maximumPoolSize: 16
+  keepAliveTime: 60000
+  queueCapacity: 200
+
+# 日志配置的名字配置
+logging:
+  config: classpath:log4j2.xml
+
+
+
+
+
+
+
+
+
+

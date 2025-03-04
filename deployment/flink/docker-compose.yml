@@ -1,0 +1,71 @@
+#version: "3.8"  docker-compose新版本不需要version
+
+services:
+  jobmanager:
+    image: flink:1.18.1-scala_2.12-java11
+    container_name: jobmanager
+    ports:
+      - "8081:8081"        # Web UI
+      - "6123:6123"        # RPC 端口
+    command: jobmanager
+    environment:
+      - FLINK_PROPERTIES=\
+        jobmanager.rpc.address=jobmanager\
+        jobmanager.memory.heap.size=1024m\
+        jobmanager.memory.direct.size=512m\
+        taskmanager.memory.process.size=4096m\
+        parallelism.default=2
+    volumes:
+      - ./checkpoints:/opt/flink/checkpoints    # 检查点持久化
+      - ./savepoints:/opt/flink/savepoints      # 保存点持久化
+      - ./code:/opt/flink/usrlib                # 存放用户代码和JAR包
+      - ./logs:/opt/flink/log                   # 日志持久化
+      - ./data:/opt/flink/data                  # 数据目录
+      - ./sql:/opt/flink/sql                    # Flink SQL 文件目录
+    networks:
+      - flink-net
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 2G
+
+  taskmanager:
+    image: flink:1.18.1-scala_2.12-java11
+    container_name: taskmanager
+    depends_on:
+      - jobmanager
+    command: taskmanager
+    environment:
+      - FLINK_PROPERTIES=\
+        jobmanager.rpc.address=jobmanager\
+        taskmanager.numberOfTaskSlots=4\
+        taskmanager.memory.process.size=4096m\
+        taskmanager.memory.heap.size=2048m\
+        taskmanager.memory.direct.size=1024m
+    volumes:
+      - ./checkpoints:/opt/flink/checkpoints
+      - ./savepoints:/opt/flink/savepoints
+      - ./code:/opt/flink/usrlib                # 存放用户代码和JAR包
+      - ./data:/opt/flink/data
+      - ./logs:/opt/flink/log
+    networks:
+      - flink-net
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4G
+    scale: 1  # 可扩展多个 TaskManager，可以在启动项的时候配置
+
+networks:
+  flink-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+volumes:
+  code:
+  data:
+  conf:
+
